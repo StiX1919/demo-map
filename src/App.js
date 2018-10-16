@@ -20,8 +20,12 @@ class App extends Component {
     this.buildMap = this.buildMap.bind(this)
     this.move = this.move.bind(this)
   }
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.areaX !== this.state.areaX || prevState.areaY !== this.state.areaY){
+      this.buildMap()
+    }
+  }
   buildMap(){
-    console.log('built')
     let map = [];
     let currRow = [];
     for(let row = this.state.areaY * 5, col = -4 + (this.state.areaX * 5); row > -5 + (this.state.areaY * 5); col++){
@@ -34,7 +38,6 @@ class App extends Component {
         col = -5 + (this.state.areaX * 5);
         row--
       } else {
-        console.log('hit')
         currRow.push({x: col, y: row})
       }
     }
@@ -42,54 +45,40 @@ class App extends Component {
   }
 
   move(e){
-    if(e.key === 'ArrowRight'){
-      this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX + 1})
+    switch(e.key){
+      case 'ArrowRight':
+          this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX + 1})
+      
+          if(this.state.currentX + 1 > this.state.areaX * 5) {
+            this.setState({areaX: this.state.areaX + 1})
+          }
+          break;
+      case 'ArrowLeft':
+          this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX - 1})
 
-      if(this.state.currentX + 1 > this.state.areaX * 5) {
-        this.setState({areaX: this.state.areaX + 1})
-        this.buildMap()
-        
-      }
-    } else if(e.key === 'ArrowLeft'){
-      this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX - 1})
-      if(this.state.currentX -1 < this.state.areaX / (5 * this.state.areaX)) {
-        this.setState({areaX: this.state.areaX - 1})
-        this.buildMap()
+          if(this.state.currentX - 1 < ((this.state.areaX - 1) * 5) + 1) {
+            this.setState({areaX: this.state.areaX - 1})
+          }
+          break;
+      case 'ArrowUp':
+          this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentY: this.state.currentY + 1})
 
-      }
-    } else if(e.key === 'ArrowUp'){
-      this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentY: this.state.currentY + 1})
-      if(this.state.currentY + 1 > this.state.areaY * 5) {
-        this.setState({areaY: this.state.areaY + 1})
-        this.buildMap()
-        
-      }
-    } else if(e.key === 'ArrowDown'){
-      this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentY: this.state.currentY - 1})
-      if(this.state.currentY -1 < this.state.areaY / (5 * this.state.areaY)) {
-        this.setState({areaY: this.state.areaY - 1})
-        this.buildMap()
-        
-      }
+          if(this.state.currentY + 1 > this.state.areaY * 5) {
+            this.setState({areaY: this.state.areaY + 1})
+          }
+          break;
+      case 'ArrowDown':
+          this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentY: this.state.currentY - 1})
+          
+          if(this.state.currentY - 1 < ((this.state.areaY - 1) * 5) + 1) {
+            this.setState({areaY: this.state.areaY - 1})
+          }
+          break;
+      default: return null
     }
-    
-    // switch(e.key){
-    //   case 'ArrowUp':
-    //     return this.setState(this.state.currentX === 5 
-    //       ? {prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX + 1, areaX: this.state.areaX + 1} 
-    //       : {prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX + 1});
-    //   case 'ArrowDown':
-    //     return this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX- 1});
-    //   case 'ArrowLeft':
-    //     return this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentY: this.state.currentY - 1});
-    //   case 'ArrowRight':
-    //     return this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentY: this.state.currentY + 1});
-    //   default: console.log('missed')
-    // }
   }
 
   render() {
-    console.log(this.state)
     return (
       <div className="App" onKeyDown={this.move}>
         <button onClick={this.buildMap} ></button>
@@ -99,8 +88,11 @@ class App extends Component {
               <div className='row'>
               {row.map((spot, j) => {
                 return (
-                  <div style ={spot.x === this.state.currentX && spot.y === this.state.currentY ? {backgroundColor: 'blue', height: '30px', width: '30px', border: 'solid black 1px'} :{height: '30px', width: '30px', border: 'solid black 1px'}}>
-                    {spot.x + ':' + spot.y}
+                  <div style={{height: '50px', width: '50px', border: 'solid black 1px'}}>
+                    {spot.x === this.state.currentX && spot.y === this.state.currentY 
+                      ? <img style={{height: '50px', width: '50px'}} src='https://s1.piq.land/2015/07/23/wyTJ7WMj9DgDrDoJ3xYODfGq_400x400.png' alt='hello'/>
+                      : <h6>{spot.x + ':' + spot.y}</h6>
+                    }
                   </div>
                 )
               })}
