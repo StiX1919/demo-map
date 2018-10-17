@@ -28,14 +28,14 @@ class App extends Component {
   buildMap(){
     let map = [];
     let currRow = [];
-    for(let row = this.state.areaY * 5, col = -4 + (this.state.areaX * 5); row > -5 + (this.state.areaY * 5); col++){
-      if(col === 5 * this.state.areaX){
+    for(let row = this.state.areaY * 10, col = -9 + (this.state.areaX * 10); row > -10 + (this.state.areaY * 10); col++){
+      if(col === 10 * this.state.areaX){
         currRow.push({x: col, y: row});
         map.push(currRow)
 
         currRow = []
 
-        col = -5 + (this.state.areaX * 5);
+        col = -10 + (this.state.areaX * 10);
         row--
       } else {
         currRow.push({x: col, y: row})
@@ -49,28 +49,28 @@ class App extends Component {
       case 'ArrowRight':
           this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX + 1})
       
-          if(this.state.currentX + 1 > this.state.areaX * 5) {
+          if(this.state.currentX + 1 > this.state.areaX * 10) {
             this.setState({areaX: this.state.areaX + 1})
           }
           break;
       case 'ArrowLeft':
           this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentX: this.state.currentX - 1})
 
-          if(this.state.currentX - 1 < ((this.state.areaX - 1) * 5) + 1) {
+          if(this.state.currentX - 1 < ((this.state.areaX - 1) * 10) + 1) {
             this.setState({areaX: this.state.areaX - 1})
           }
           break;
       case 'ArrowUp':
           this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentY: this.state.currentY + 1})
 
-          if(this.state.currentY + 1 > this.state.areaY * 5) {
+          if(this.state.currentY + 1 > this.state.areaY * 10) {
             this.setState({areaY: this.state.areaY + 1})
           }
           break;
       case 'ArrowDown':
           this.setState({prevX: this.state.currentX, prevY: this.state.currentY, currentY: this.state.currentY - 1})
           
-          if(this.state.currentY - 1 < ((this.state.areaY - 1) * 5) + 1) {
+          if(this.state.currentY - 1 < ((this.state.areaY - 1) * 10) + 1) {
             this.setState({areaY: this.state.areaY - 1})
           }
           break;
